@@ -49,6 +49,7 @@ def test(data,
     training = model is not None
     if training:  # called by train.py
         device = next(model.parameters()).device  # get model device
+        plots=True
         #save_txt = True
 
     else:  # called directly
