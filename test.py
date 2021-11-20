@@ -49,6 +49,7 @@ def test(data,
     training = model is not None
     if training:  # called by train.py
         device = next(model.parameters()).device  # get model device
+        #save_txt = True
 
     else:  # called directly
         set_logging()
@@ -105,6 +106,7 @@ def test(data,
         names = model.names if hasattr(model, 'names') else model.module.names
     except:
         names = load_classes(opt.names)
+    print('Names: ', names)
     coco91class = coco80_to_coco91_class()
     s = ('%20s' + '%12s' * 6) % ('Class', 'Images', 'Targets', 'P', 'R', 'mAP@.5', 'mAP@.5:.95')
     p, r, f1, mp, mr, map50, map, t0, t1 = 0., 0., 0., 0., 0., 0., 0., 0., 0.
@@ -159,12 +161,13 @@ def test(data,
                         f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
             # W&B logging
-            if plots and len(wandb_images) < log_imgs:
+            if False: #plots and len(wandb_images) < log_imgs:
+                #print('Predictions', pred.tolist())
                 box_data = [{"position": {"minX": xyxy[0], "minY": xyxy[1], "maxX": xyxy[2], "maxY": xyxy[3]},
                              "class_id": int(cls),
-                             "box_caption": "%s %.3f" % (names[cls], conf),
+                             "box_caption": "%s %.3f" % (names[int(cls)], conf),
                              "scores": {"class_score": conf},
-                             "domain": "pixel"} for *xyxy, conf, cls in pred.tolist()]
+                             "domain": "pixel"} for *xyxy, conf, cls in pred.tolist() if int(cls) == 0]
                 boxes = {"predictions": {"box_data": box_data, "class_labels": names}}
                 wandb_images.append(wandb.Image(img[si], boxes=boxes, caption=path.name))
 

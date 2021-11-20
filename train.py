@@ -123,7 +123,7 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
     if wandb and wandb.run is None:
         opt.hyp = hyp  # add hyperparameters
         wandb_run = wandb.init(config=opt, resume="allow",
-                               project='YOLOR' if opt.project == 'runs/train' else Path(opt.project).stem,
+                               project='cotton' if opt.project == 'runs/train' else Path(opt.project).stem,
                                name=save_dir.stem,
                                id=ckpt.get('wandb_id') if 'ckpt' in locals() else None)
 
@@ -340,7 +340,8 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
                                                  single_cls=opt.single_cls,
                                                  dataloader=testloader,
                                                  save_dir=save_dir,
-                                                 plots=plots and final_epoch,
+                                                 #plots=plots and final_epoch,
+                                                 plots=True,
                                                  log_imgs=opt.log_imgs if wandb else 0)
 
             # Write
